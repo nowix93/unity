@@ -1,0 +1,72 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GokuAttacks : MonoBehaviour
+{
+
+    private Rigidbody2D MyRigidbody;
+    private PlayerController playerC;
+    private Vector2 PlayerDir;
+    public Animator Anim;
+    private bool Attack;
+    private bool stopMove;
+
+    public float attackTime;
+    private float attackTimeConter;
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        playerC = FindObjectOfType<PlayerController>();
+        PlayerDir = GetComponent<PlayerController>().lastMove;
+        //Anim = GetComponentInChildren<Animator>();
+        MyRigidbody = GetComponent<Rigidbody2D>();
+        stopMove = GetComponent<PlayerController>().StopMove;
+
+        Attack = false;
+        attackTimeConter = attackTime;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+       AttackRH();
+
+
+    }
+    void attackDir()
+    {
+        Anim.SetFloat("LastMoveY", PlayerDir.x);
+        Anim.SetFloat("LastMoveY", PlayerDir.y);     
+    }
+    void AttackRH()
+    {
+        if(Input.GetKeyDown(KeyCode.N))
+        {
+            gameObject.transform.GetChild(0).gameObject.SetActive(true);
+            attackTimeConter = attackTime;
+            attackTimeConter -= Time.deltaTime;
+            MyRigidbody.velocity = Vector2.zero;
+            stopMove = false;
+            //  invisible();
+
+            Anim.SetBool("Attack", Attack);
+
+            attackDir();
+
+            Attack = true;
+            if(attackTimeConter <= 0)
+            {
+                gameObject.transform.GetChild(0).gameObject.SetActive(false);
+                Attack = false;
+                stopMove = false;
+            }
+        }
+    }
+    void invisible()
+    {
+       // transform.color
+    }
+}
